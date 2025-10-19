@@ -1,4 +1,4 @@
-package org.utn.ba.order.services;
+package org.utn.ba.order.services.imp;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,9 @@ import org.utn.ba.order.entities.models.OrderItem;
 import org.utn.ba.order.entities.repositories.repositories.OrderRepository;
 import org.utn.ba.order.mappers.OrderMapper;
 import org.utn.ba.order.mappers.UserDetailsMapper;
+import org.utn.ba.order.services.ClearCartEventPublisher;
+import org.utn.ba.order.services.IOrderService;
+import org.utn.ba.order.services.OrderConfirmationEventPublisher;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,12 @@ public class OrderService implements IOrderService {
 
   @Autowired
   private ShoppingCartClient cartClient;
+
+  @Autowired
+  private OrderConfirmationEventPublisher orderConfirmationEventPublisher;
+
+  @Autowired
+  private ClearCartEventPublisher clearCartEventPublisher;
 
   @Override
   public List<OrderOutputDTO> findAll() {
@@ -53,7 +62,9 @@ public class OrderService implements IOrderService {
   public OrderOutputDTO createOrder(UserDetailsDTO userDetailsDTO) {
     ShoppingCartOutputDTO cart = cartClient.getMyCart();
     if (cart == null || cart.getItems().isEmpty()) {
-      throw new IllegalStateException("Cannot create an order from an empty cart.");
+        return OrderOutputDTO.builder()
+            .description("Cannot create an order from an empty cart.")
+            .build();
     }
 
     Order newOrder = new Order();
@@ -77,10 +88,11 @@ public class OrderService implements IOrderService {
 
     newOrder.calculateFinalPrice();
     this.orderRepository.save(newOrder);
+    // mandamos al notification service para que notifique la orden
+    this.orderConfirmationEventPublisher.publishOrderConfirmation(newOrder);
 
-
-    // TODO: que pasa si falla justo aca?
-    cartClient.clearMyCart();
+    // mandamos al cart service para que borre el carrito
+    this.clearCartEventPublisher.clearMyCart(userDetailsDTO.userId());
 
     return OrderMapper.createFrom(newOrder);
 

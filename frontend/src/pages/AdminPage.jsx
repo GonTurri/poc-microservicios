@@ -94,7 +94,7 @@ const AdminPage = () => {
             {
                 pending: 'Creando producto...',
                 success: '¡Producto creado exitosamente!',
-                error: 'Error al crear el producto. Verifica los logs o permisos.'
+                error: 'Error al crear el producto. Intentelo más tarde'
             }
         );
 

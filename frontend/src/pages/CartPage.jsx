@@ -44,6 +44,8 @@ const CartPage = () => {
     const handleCheckout = async () => {
         setIsCheckingOut(true);
         try {
+            // toast.promise will now correctly show success on resolve,
+            // or the error message from the thrown error on reject.
             const orderData = await toast.promise(
                 checkout(),
                 {
@@ -52,11 +54,14 @@ const CartPage = () => {
                     error: 'Error al procesar el pedido. Inténtalo de nuevo.'
                 }
             );
-            
-            // Redirect to success page with order data
+
+            // This line is only reached if checkout() resolved successfully
             navigate('/order-success', { state: { orderData } });
+
         } catch (error) {
-            console.error("Checkout failed:", error);
+            // Catch errors if the promise rejected (handled by toast.promise)
+            // No need to show another toast here, just log if needed
+            console.error("Checkout failed:", error.message);
         } finally {
             setIsCheckingOut(false);
         }

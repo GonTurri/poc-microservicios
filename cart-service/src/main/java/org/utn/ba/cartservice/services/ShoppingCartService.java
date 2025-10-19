@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import org.utn.ba.cartservice.client.ProductClient;
 import org.utn.ba.cartservice.client.dto.ProductOutputDTO;
 import org.utn.ba.cartservice.dto.input.CartItemInputDTO;
-import org.utn.ba.cartservice.dto.output.ShoppingCartOutputDTO;
-import org.utn.ba.cartservice.entities.models.CartItem;
 import org.utn.ba.cartservice.entities.models.ShoppingCart;
 import org.utn.ba.cartservice.exceptions.ServiceUnavailableException;
-import org.utn.ba.cartservice.entities.repositories.ShoppingCartRepository;
 import org.utn.ba.cartservice.mappers.ShoppingCartMapper;
+import org.utn.ba.cartservice.dto.output.ShoppingCartOutputDTO;
+import org.utn.ba.cartservice.entities.models.CartItem;
+import org.utn.ba.cartservice.entities.repositories.ShoppingCartRepository;
 
 @Service
 @RequiredArgsConstructor

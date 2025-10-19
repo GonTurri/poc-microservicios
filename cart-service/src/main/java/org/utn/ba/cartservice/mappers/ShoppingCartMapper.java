@@ -1,8 +1,7 @@
 package org.utn.ba.cartservice.mappers;
 
-import org.utn.ba.cartservice.dto.output.ShoppingCartOutputDTO;
 import org.utn.ba.cartservice.entities.models.ShoppingCart;
-import java.util.List;
+import org.utn.ba.cartservice.dto.output.ShoppingCartOutputDTO;
 import java.util.stream.Collectors;
 
 public class ShoppingCartMapper {

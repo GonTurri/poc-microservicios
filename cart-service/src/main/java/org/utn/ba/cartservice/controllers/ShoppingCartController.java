@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.utn.ba.cartservice.dto.input.CartItemInputDTO;
-import org.utn.ba.cartservice.dto.input.CartItemUpdateDTO;
 import org.utn.ba.cartservice.dto.output.ShoppingCartOutputDTO;
+import org.utn.ba.cartservice.dto.input.CartItemUpdateDTO;
 import org.utn.ba.cartservice.services.IShoppingCartService;
 
 @RestController

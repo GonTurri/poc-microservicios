@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="product-service" />
         <module name="order-service" />
+        <module name="event-dtos" />
         <module name="gateway-service" />
         <module name="discovery-service" />
       </profile>
@@ -20,14 +21,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
         </processorPath>
         <module name="cart-service" />
-      </profile>
-      <profile name="Annotation profile for notification-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
-        </processorPath>
         <module name="notification-service" />
       </profile>
     </annotationProcessing>
