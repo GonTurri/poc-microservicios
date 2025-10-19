@@ -71,8 +71,9 @@ export const CartProvider = ({ children }) => {
 
     const checkout = useCallback(async () => {
         try {
-            await apiClient.post('/orders');
+            const response = await apiClient.post('/orders');
             refreshCartCount(); // Refresh after checkout
+            return response.data; // Return the order data
         } catch (error) {
             console.error('Error during checkout:', error);
             throw error;

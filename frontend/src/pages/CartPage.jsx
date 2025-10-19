@@ -44,7 +44,7 @@ const CartPage = () => {
     const handleCheckout = async () => {
         setIsCheckingOut(true);
         try {
-            await toast.promise(
+            const orderData = await toast.promise(
                 checkout(),
                 {
                     pending: 'Procesando tu pedido...',
@@ -53,8 +53,8 @@ const CartPage = () => {
                 }
             );
             
-            // Redirect to success page after successful checkout
-            navigate('/order-success');
+            // Redirect to success page with order data
+            navigate('/order-success', { state: { orderData } });
         } catch (error) {
             console.error("Checkout failed:", error);
         } finally {
