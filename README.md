@@ -3,7 +3,7 @@
 Este proyecto muestra cómo crear microservicios simples con Spring Boot. Se permite la conexión entre sí mediante Spring Cloud Open Feign, sumado a la utilización de Spring Cloud Eureka Server para implementar un Service Registry y Spring Cloud Gateway como API Gateway. 
 
 ## Arquitectura
-El módulo sigue un estilo arquitectónico de microservicios. Se tienen dos microservicios (Órdenes y Productos) que se registran a sí mismos en el Service Discovery (implementado con Eureka Server) y se comunican entre sí mediante un cliente REST (Open Feign). Todo el sistema se esconde detrás del API Gateway.
+El módulo sigue un estilo arquitectónico de microservicios. Se tienen cuatro microservicios (Órdenes, Productos, Carrito y Notificaciones) que se registran a sí mismos en el Service Discovery (implementado con Eureka Server) y se comunican entre sí mediante un cliente REST (Open Feign). Todo el sistema se esconde detrás del API Gateway.
 
 El diagrama de componentes que comunica esta arquitectura es:
 ![image](https://github.com/user-attachments/assets/eaca40e2-e64e-471e-b83e-17a8aa9d3778)
@@ -12,18 +12,23 @@ El diagrama de componentes que comunica esta arquitectura es:
 ## Tecnologías Utilizadas
 
 - **Java 17**
+- **React y Tailwind** (para el frontend)
 - **Spring Boot 3.3**
 - **Spring Data JPA** (para interacción con la base de datos)
 - **Maven** (gestor de dependencias)
 - **Lombok** (para reducir el código boilerplate)
 - **MySQL**
+- **MongoDB**
 - **Spring Cloud Netflix Eureka** (Service Registry & Discovery)
 - **Spring Cloud Gateway** (API Gateway)
 - **Spring Cloud Open Feign** (Cliente REST)
 - **Resilience 4J** (Circuit Breaker)
-
+- **Kafka Consumer** (Integración por cola de mensajes entre el Carrito y el servicio de Notificación)
+- **Docker** (para portabilidad en la BD de Mongo y Kafka)
+- **Auth0** (implementación de SSO para acceder al Sistema)
+  
 ## Estructura de Proyecto
-Los proyectos de Órdenes y Productos están organizados de la siguiente manera:
+Los proyectos de Órdenes, Productos y Carrito se encuentran estructurados de la siguiente forma. 
 
 ```plaintext
 src/
@@ -47,8 +52,8 @@ src/
 - **1.** Clonar la aplicación.
 - **2.** Cambiar los puertos para las aplicaciones como prefieras. Para eso, abrir en los proyectos  `src/main/resources/application.properties` y cambiar la propiedad `server.port`. Para el API Gateway se puede cambiar el puerto por defecto abriendo el archivo  `src/main/resources/application.yml` y cambiar la propiedad `server.port`.
 - **3.** Correr el Service Registry & Discovery. Iniciará en el puerto `8761` por defecto. Una vez que inicie la aplicación, podrás visitar el *dashboard* de Eureka bajo  `http://localhost:8761`.
-- **4.** Correr los microservicios de Productos y de Órdenes. 
+- **4.** Correr los microservicios de Productos, Órdenes, Carrito y Notificaciones. 
 - **5.** Correr el API Gateway. Este permitirá redirigir cualquier solicitud al microservicio específico dependiendo de la configuración del *proxy*.
   
 ## Circuit Breaker
-En caso de que una instancia del microservicio de Productos falle o esté caído y se realice una solicitud a este mediante el microservicio de Órdenes, se activará el Circuit Breaker provisto por Resilience4J. 
+En caso de que una instancia del microservicio de Productos falle o esté caído y se realice una solicitud a este mediante el microservicio de Órdenes, se activará el Circuit Breaker provisto por Resilience4J. La misma situación ocurrirá 
