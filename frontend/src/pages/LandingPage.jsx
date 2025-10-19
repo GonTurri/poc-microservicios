@@ -130,9 +130,6 @@ const LandingPage = () => {
                                             <span className="text-xl font-bold text-blue-600">
                                                 ${product.price.toFixed(2)}
                                             </span>
-                                            <div className="text-sm text-gray-500">
-                                                Stock: {product.stock}
-                                            </div>
                                         </div>
                                         
                                         {/* Login Prompt */}
