@@ -102,6 +102,7 @@ export const CartProvider = ({ children }) => {
             // Check if it's a successful order
             else if (response.data && response.data.id) {
                 await fetchCart();
+                console.log("hola estoy aca " + cart)
                 return response.data;
             }
             else {
