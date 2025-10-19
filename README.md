@@ -6,7 +6,8 @@ Este proyecto muestra cómo crear microservicios simples con Spring Boot. Se per
 El módulo sigue un estilo arquitectónico de microservicios. Se tienen cuatro microservicios (Órdenes, Productos, Carrito y Notificaciones) que se registran a sí mismos en el Service Discovery (implementado con Eureka Server) y se comunican entre sí mediante un cliente REST (Open Feign). Todo el sistema se esconde detrás del API Gateway, exceptuando por el microservicio de Notificaciones. Además, se cuenta con una cola de mensajes con Apache Kafka, que permite enviar correos electrónicos luego de efectuada una orden o avisar la confirmación de la misma para vaciar el carrito en el microservicio correspondiente.
 
 El diagrama de componentes que comunica esta arquitectura es:
-<img width="2961" height="1452" alt="image" src="https://github.com/user-attachments/assets/577ca5fd-340a-4929-896c-bae917540ccc" />
+<img width="2861" height="1301" alt="image" src="https://github.com/user-attachments/assets/64b0979f-5023-4f4e-aee1-47adf765eea8" />
+
 
 ## Tecnologías Utilizadas
 
