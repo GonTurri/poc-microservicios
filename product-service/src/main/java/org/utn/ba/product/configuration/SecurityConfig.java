@@ -27,6 +27,7 @@ public class SecurityConfig {
 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/actuator/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/products/**", "/images/**").permitAll()
 
             .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority("SCOPE_admin")
