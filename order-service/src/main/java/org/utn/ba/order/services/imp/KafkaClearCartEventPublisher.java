@@ -17,13 +17,14 @@ public class KafkaClearCartEventPublisher implements ClearCartEventPublisher {
   private String clearCartCommandTopic;
 
   private final KafkaTemplate<String, ClearCartEvent> kafkaTemplate;
+
   @Override
   public void clearMyCart(String userId) {
     try {
-      kafkaTemplate.send(clearCartCommandTopic,new ClearCartEvent(userId));
-      log.info("Clear cart command sent for user {}",userId);
+      kafkaTemplate.send(clearCartCommandTopic, userId, new ClearCartEvent(userId));
+      log.info("Clear cart command sent for user {}", userId);
     } catch (Exception e) {
-      log.error("Failed to send Kafka message to clear cart",e);
+      log.error("Failed to send Kafka message to clear cart", e);
     }
   }
 }
