@@ -5,7 +5,6 @@ const OrderSuccessPage = () => {
     const location = useLocation();
     const orderData = location.state?.orderData;
 
-    // Si no hay datos del pedido, mostrar mensaje de error
     if (!orderData) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center px-4">
@@ -51,7 +50,6 @@ const OrderSuccessPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4">
             <div className="max-w-4xl mx-auto">
-                {/* Success Icon */}
                 <div className="text-center mb-8">
                     <div className="mx-auto w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 success-icon">
                         <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +58,6 @@ const OrderSuccessPage = () => {
                     </div>
                 </div>
 
-                {/* Success Message */}
                 <div className="text-center mb-8 slide-up">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">
                         ¡Compra Realizada Exitosamente!
@@ -76,7 +73,6 @@ const OrderSuccessPage = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Order Details */}
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                         <h2 className="text-xl font-semibold text-gray-900 mb-4">Detalles del Pedido</h2>
                         <div className="space-y-3">
@@ -105,7 +101,6 @@ const OrderSuccessPage = () => {
                         </div>
                     </div>
 
-                    {/* Customer Details */}
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                         <h2 className="text-xl font-semibold text-gray-900 mb-4">Información del Cliente</h2>
                         <div className="space-y-3">
@@ -125,7 +120,6 @@ const OrderSuccessPage = () => {
                     </div>
                 </div>
 
-                {/* Order Items */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mt-8">
                     <h2 className="text-xl font-semibold text-gray-900 mb-4">Productos Comprados</h2>
                     <div className="space-y-4">
@@ -161,7 +155,6 @@ const OrderSuccessPage = () => {
                     </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                     <Link 
                         to="/" 
@@ -184,7 +177,6 @@ const OrderSuccessPage = () => {
                     </Link>
                 </div>
 
-                {/* Additional Info */}
                 <div className="mt-8 text-center">
                     <p className="text-sm text-gray-500 mb-4">
                         ¿Tienes alguna pregunta sobre tu pedido?

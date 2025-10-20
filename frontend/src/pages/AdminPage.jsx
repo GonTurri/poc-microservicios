@@ -115,16 +115,13 @@ const AdminPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
             <div className="max-w-4xl mx-auto">
-                {/* Header */}
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">Crear Nuevo Producto</h1>
                     <p className="text-lg text-gray-600">Completa la información para agregar un nuevo producto al catálogo</p>
                 </div>
 
-                {/* Main Form Card */}
                 <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                     <form onSubmit={handleSubmit} className="p-8 space-y-8">
-                        {/* Product Information Section */}
                         <div className="space-y-6">
                             <div className="flex items-center space-x-3 mb-6">
                                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -136,7 +133,6 @@ const AdminPage = () => {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Product Name */}
                                 <div className="space-y-2">
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                         Nombre del Producto *
@@ -160,7 +156,6 @@ const AdminPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Price */}
                                 <div className="space-y-2">
                                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                                         Precio *
@@ -186,7 +181,6 @@ const AdminPage = () => {
                             </div>
                         </div>
 
-                        {/* Image Upload Section */}
                         <div className="space-y-6">
                             <div className="flex items-center space-x-3 mb-6">
                                 <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
@@ -197,7 +191,6 @@ const AdminPage = () => {
                                 <h2 className="text-xl font-semibold text-gray-900">Imagen del Producto</h2>
                             </div>
 
-                            {/* Drag & Drop Area */}
                             <div
                                 className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ${
                                     isDragOver 
@@ -270,7 +263,6 @@ const AdminPage = () => {
                                 )}
                             </div>
 
-                            {/* Image Preview */}
                             {previewUrl && (
                                 <div className="flex justify-center">
                                     <div className="relative group">
@@ -298,7 +290,6 @@ const AdminPage = () => {
                             )}
                         </div>
 
-                        {/* Submit Button */}
                         <div className="pt-6">
                             <button
                                 type="submit"

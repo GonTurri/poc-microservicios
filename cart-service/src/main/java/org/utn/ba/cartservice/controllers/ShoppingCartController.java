@@ -25,7 +25,7 @@ public class ShoppingCartController {
   private final IShoppingCartService cartService;
   @GetMapping
   public ResponseEntity<ShoppingCartOutputDTO> getMyCart(@AuthenticationPrincipal Jwt jwt) {
-    String userId = jwt.getSubject(); // 'getSubject()' gets the 'sub' claim
+    String userId = jwt.getSubject();
     ShoppingCartOutputDTO cartDTO = cartService.getCartByUserId(userId);
     return ResponseEntity.ok(cartDTO);
   }

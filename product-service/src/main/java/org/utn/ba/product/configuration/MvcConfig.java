@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-  // Inject the upload directory path from your application.properties
   @Value("${file.upload-dir}")
   private String uploadDir;
 

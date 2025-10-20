@@ -31,7 +31,6 @@ public class ShoppingCartService implements IShoppingCartService {
   public ShoppingCartOutputDTO addItemToCart(String userId, CartItemInputDTO itemInputDTO) {
     ShoppingCart cart = findOrCreateCart(userId);
 
-    // TODO: que pasa si no existe el producto ??
     ProductOutputDTO product = productClient.getProductById(itemInputDTO.productId()).getBody();
 
     CartItem newItem = CartItem.builder()

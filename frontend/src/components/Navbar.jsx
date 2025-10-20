@@ -18,7 +18,6 @@ const Navbar = () => {
                 <div className="flex items-center space-x-4">
                     {isAuthenticated && (
                         <>
-                            {/* Cart Icon with Counter */}
                             <NavLink 
                                 to="/cart" 
                                 className={({ isActive }) => `relative text-gray-600 hover:text-blue-600 transition-colors ${isActive ? 'font-bold' : ''}`}

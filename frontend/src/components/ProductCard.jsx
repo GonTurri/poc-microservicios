@@ -30,7 +30,6 @@ const ProductCard = ({ product, onAddToCart, isAuthenticated, loginWithRedirect,
 
     return (
         <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group transform hover:-translate-y-2">
-            {/* Image Container */}
             <div className="relative h-64 overflow-hidden bg-gray-100">
                 {!imageLoaded && (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -61,7 +60,6 @@ const ProductCard = ({ product, onAddToCart, isAuthenticated, loginWithRedirect,
                 
                
 
-                {/* Price Badge */}
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-lg">
                     <span className="text-lg font-bold text-green-600">
                         ${product.price.toFixed(2)}
@@ -69,7 +67,6 @@ const ProductCard = ({ product, onAddToCart, isAuthenticated, loginWithRedirect,
                 </div>
             </div>
 
-            {/* Product Info */}
             <div className="p-6">
                 <div className="mb-4">
                     <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
@@ -77,7 +74,6 @@ const ProductCard = ({ product, onAddToCart, isAuthenticated, loginWithRedirect,
                     </h3>
                 </div>
 
-                {/* Bottom Actions */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>

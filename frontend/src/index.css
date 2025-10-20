@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom animations for cart items */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -19,7 +18,6 @@
   opacity: 0;
 }
 
-/* Success page animations */
 @keyframes success-bounce {
   0% {
     transform: scale(0.3);
@@ -56,7 +54,6 @@
   animation: slide-up 0.8s ease-out forwards;
 }
 
-/* Landing page utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -64,7 +61,6 @@
   overflow: hidden;
 }
 
-/* Product card hover effects */
 .product-card {
   transition: all 0.3s ease;
 }
@@ -73,7 +69,6 @@
   transform: translateY(-4px);
 }
 
-/* Banner gradient animation */
 @keyframes gradient-shift {
   0% {
     background-position: 0% 50%;

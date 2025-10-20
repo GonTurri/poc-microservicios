@@ -30,9 +30,7 @@ public class ShoppingCart {
   public void addItem(CartItem newItem) {
     findItemByProductId(newItem.getProductId())
         .ifPresentOrElse(
-            // If item exists, update its quantity
             existingItem -> existingItem.setAmount(existingItem.getAmount() + newItem.getAmount()),
-            // If item does not exist, add it to the list
             () -> this.items.add(newItem)
         );
     this.lastModifiedDate = Instant.now();

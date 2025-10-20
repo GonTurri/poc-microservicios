@@ -37,8 +37,6 @@ public class FileSystemUploadService implements IFileUploadService{
       Path targetLocation = this.fileStorageLocation.resolve(fileName);
       Files.copy(file.getInputStream(), targetLocation);
 
-      // Return the URL path that the gateway will serve
-      // Returns just the relative path: /images/....
       return "/images/" + fileName;
     } catch (IOException ex) {
       throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Getter
 @Configuration
-@ConfigurationProperties(prefix = "file") // Binds all properties starting with "file"
+@ConfigurationProperties(prefix = "file")
 public class FileStorageProperties {
   private String uploadDir;
 }

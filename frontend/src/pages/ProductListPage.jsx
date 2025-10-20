@@ -54,7 +54,6 @@ const ProductListPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
             <div className="container mx-auto px-4 py-8">
-                {/* Header Section */}
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                         Nuestros Productos
@@ -85,7 +84,6 @@ const ProductListPage = () => {
                     </div>
                 </div>
 
-                {/* Products Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {products.map(product => (
                         <ProductCard
@@ -99,7 +97,6 @@ const ProductListPage = () => {
                     ))}
                 </div>
 
-                {/* Empty State */}
                 {products.length === 0 && !isLoading && (
                     <div className="text-center py-16">
                         <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">

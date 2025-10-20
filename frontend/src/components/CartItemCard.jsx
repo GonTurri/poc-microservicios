@@ -43,7 +43,6 @@ const CartItemCard = ({ item, onUpdate, onDelete, apiBaseUrl }) => {
         <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group border border-gray-100">
             <div className="p-6">
                 <div className="flex flex-col lg:flex-row gap-6">
-                    {/* Image Section */}
                     <div className="flex-shrink-0">
                         <div className="relative w-32 h-32 lg:w-40 lg:h-40 rounded-xl overflow-hidden bg-gray-100">
                             {!imageLoaded && (
@@ -75,7 +74,6 @@ const CartItemCard = ({ item, onUpdate, onDelete, apiBaseUrl }) => {
                         </div>
                     </div>
 
-                    {/* Product Info Section */}
                     <div className="flex-grow min-w-0">
                         <div className="mb-4">
                             <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
@@ -86,7 +84,6 @@ const CartItemCard = ({ item, onUpdate, onDelete, apiBaseUrl }) => {
                             </div>
                         </div>
 
-                        {/* Quantity Controls */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <label className="text-sm font-medium text-gray-700">Cantidad:</label>
@@ -122,7 +119,6 @@ const CartItemCard = ({ item, onUpdate, onDelete, apiBaseUrl }) => {
                                 </div>
                             </div>
 
-                            {/* Subtotal */}
                             <div className="text-right">
                                 <p className="text-sm text-gray-600">Subtotal</p>
                                 <p className="text-xl font-bold text-gray-900">
@@ -131,7 +127,6 @@ const CartItemCard = ({ item, onUpdate, onDelete, apiBaseUrl }) => {
                             </div>
                         </div>
 
-                        {/* Action Buttons */}
                         <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
                             <div className="flex items-center space-x-3">
                                 {currentQuantity !== item.amount && (

@@ -2,10 +2,7 @@ package org.utn.ba.cartservice.entities.models;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-// TODO: Bounded context de producto ???
 @Data
 @Builder
 public class CartItem {

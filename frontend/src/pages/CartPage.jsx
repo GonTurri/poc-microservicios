@@ -44,8 +44,6 @@ const CartPage = () => {
     const handleCheckout = async () => {
         setIsCheckingOut(true);
         try {
-            // toast.promise will now correctly show success on resolve,
-            // or the error message from the thrown error on reject.
             const orderData = await toast.promise(
                 checkout(),
                 {
@@ -55,12 +53,9 @@ const CartPage = () => {
                 }
             );
 
-            // This line is only reached if checkout() resolved successfully
             navigate('/order-success', { state: { orderData } });
 
         } catch (error) {
-            // Catch errors if the promise rejected (handled by toast.promise)
-            // No need to show another toast here, just log if needed
             console.error("Checkout failed:", error.message);
         } finally {
             setIsCheckingOut(false);
@@ -77,7 +72,6 @@ const CartPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
             <div className="container mx-auto px-4 py-8">
-                {/* Header Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                         Mi Carrito de Compras
@@ -128,12 +122,10 @@ const CartPage = () => {
                                 </div>
                             </div>
 
-                            {/* Checkout Summary */}
                             <div className="lg:col-span-1">
                                 <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-8">
                                     <h3 className="text-xl font-bold text-gray-900 mb-6">Resumen del Pedido</h3>
-                                    
-                                    {/* Order Summary */}
+
                                     <div className="space-y-4 mb-6">
                                         <div className="flex justify-between items-center py-2 border-b border-gray-100">
                                             <span className="text-gray-600">Subtotal ({totalItemCount} artículos)</span>
@@ -156,7 +148,6 @@ const CartPage = () => {
                                         </div>
                                     </div>
 
-                                    {/* Checkout Button */}
                                     <button
                                         onClick={handleCheckout}
                                         disabled={isCheckingOut}
@@ -195,7 +186,6 @@ const CartPage = () => {
                         </div>
                     </div>
                 ) : (
-                    /* Empty Cart State */
                     <div className="max-w-2xl mx-auto text-center py-16">
                         <div className="mx-auto w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mb-8">
                             <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

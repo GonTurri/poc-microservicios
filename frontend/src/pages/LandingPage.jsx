@@ -33,7 +33,6 @@ const LandingPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Header */}
             <header className="bg-white shadow-sm sticky top-0 z-10">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
@@ -41,8 +40,7 @@ const LandingPage = () => {
                         <Link to="/" className="text-3xl font-bold text-blue-600 hover:text-blue-800">
                             DDS-CART
                         </Link>
-                        
-                        {/* Login Button */}
+
                         <button
                             onClick={() => loginWithRedirect()}
                             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
@@ -53,7 +51,6 @@ const LandingPage = () => {
                 </div>
             </header>
 
-            {/* Promotional Banner */}
             <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-8 animated-gradient">
                 <div className="container mx-auto px-4 text-center">
                     <h1 className="text-3xl md:text-4xl font-bold mb-4">
@@ -85,9 +82,7 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            {/* Main Content */}
             <main className="container mx-auto px-4 py-8">
-                {/* Featured Products Section */}
                 <section className="mb-12">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold text-gray-900">Productos Destacados</h2>
@@ -104,7 +99,6 @@ const LandingPage = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {products.slice(0, 8).map((product) => (
                                 <div key={product.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group product-card">
-                                    {/* Product Image */}
                                     <div className="aspect-square bg-gray-100 relative overflow-hidden">
                                         {product.imageUrl ? (
                                             <img 
@@ -121,7 +115,6 @@ const LandingPage = () => {
                                         )}
                                     </div>
 
-                                    {/* Product Info */}
                                     <div className="p-4">
                                         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                             {product.name}
@@ -131,8 +124,7 @@ const LandingPage = () => {
                                                 ${product.price.toFixed(2)}
                                             </span>
                                         </div>
-                                        
-                                        {/* Login Prompt */}
+
                                         <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                                             <div className="flex items-center space-x-2 text-blue-700">
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,7 +150,6 @@ const LandingPage = () => {
                     )}
                 </section>
 
-                {/* Call to Action */}
                 <section className="bg-white rounded-2xl shadow-lg p-8 text-center">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         ¿Listo para comenzar a comprar?
@@ -176,7 +167,6 @@ const LandingPage = () => {
                 </section>
             </main>
 
-            {/* Footer */}
             <footer className="bg-gray-800 text-white py-8 mt-12">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
