@@ -47,15 +47,15 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(List.of("https://front-ddsi-cart.dds.apps.disilab.ar"));
+    configuration.setAllowedOriginPatterns(List.of("https://front-ddsi-cart.dds.apps.disilab.ar","http://localhost:3000"));
 
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
-    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
     configuration.setAllowCredentials(true);
 
-    configuration.setExposedHeaders(List.of("Authorization"));
+//    configuration.setExposedHeaders(List.of("Authorization"));
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
