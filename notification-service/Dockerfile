@@ -26,4 +26,4 @@ COPY --from=builder /app/notification-service/target/*-SNAPSHOT.jar app.jar
 # 4. Expón el puerto 9814 (el de tu notification-service)
 EXPOSE 9814
 
-ENTRYPOINT ["java","-jar","/app/app.jar"], "-b"]
+ENTRYPOINT ["java","-jar","/app/app.jar"]
