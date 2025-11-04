@@ -9,6 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@auth0/auth0-react": "^2.8.0",
     "axios": "^1.12.2",

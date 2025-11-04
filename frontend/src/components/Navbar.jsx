@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link, NavLink } from 'react-router-dom';
-import { useAdminCheck } from '../hooks/useAdminCheck';
+import { useAdminCheck } from '../hooks/UseAdminCheck.jsx';
 import { useCart } from '../contexts/CartContext';
 
 const Navbar = () => {
