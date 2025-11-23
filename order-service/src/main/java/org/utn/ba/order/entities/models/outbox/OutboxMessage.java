@@ -13,8 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+@Table(name = "`outbox_message`")
 @Entity
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -26,14 +26,22 @@ public class OutboxMessage {
   @Column(name = "topic", nullable = false)
   private String topic;
 
+  @Column(name = "message_key", nullable = false)
+  private String key;
+
   @Lob
-  @Column(name = "payload", nullable = false)
+  @Column(name = "payload", nullable = false,length = 16777215)
   private String payload;
 
   @Column(name = "creation_time", nullable = false)
   private LocalDateTime creationTime;
 
   @Column(name = "processed", nullable = false)
+  @Builder.Default
   private Boolean processed = false;
+
+  public void markProcessed(){
+    this.processed = true;
+  }
 
 }

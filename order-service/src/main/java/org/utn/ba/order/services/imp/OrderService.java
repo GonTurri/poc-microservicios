@@ -1,10 +1,10 @@
 package org.utn.ba.order.services.imp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import jakarta.transaction.Transactional;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.utn.ba.order.client.ProductClient;
 import org.utn.ba.order.client.ShoppingCartClient;
 import org.utn.ba.order.client.dto.ProductOutputDTO;

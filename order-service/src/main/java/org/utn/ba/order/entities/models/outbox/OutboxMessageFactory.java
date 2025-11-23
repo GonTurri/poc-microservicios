@@ -24,6 +24,7 @@ public class OutboxMessageFactory {
 
     return OutboxMessage.builder()
         .topic(topicProperties.getOrderConfirmations())
+        .key(String.valueOf(order.getId()))
         .payload(payloadJson)
         .creationTime(LocalDateTime.now())
         .build();
@@ -35,6 +36,7 @@ public class OutboxMessageFactory {
 
     return OutboxMessage.builder()
         .topic(topicProperties.getClearCart())
+        .key(userId)
         .payload(payloadJson)
         .creationTime(LocalDateTime.now())
         .build();
