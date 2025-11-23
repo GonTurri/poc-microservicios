@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Builder
-public class OutBoxMessage {
+public class OutboxMessage {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 

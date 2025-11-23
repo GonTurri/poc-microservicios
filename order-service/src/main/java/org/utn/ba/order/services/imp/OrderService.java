@@ -1,6 +1,8 @@
 package org.utn.ba.order.services.imp;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.utn.ba.order.client.ProductClient;
@@ -11,15 +13,16 @@ import org.utn.ba.order.dto.OrderOutputDTO;
 import org.utn.ba.order.dto.UserDetailsDTO;
 import org.utn.ba.order.entities.models.Order;
 import org.utn.ba.order.entities.models.OrderItem;
-import org.utn.ba.order.entities.repositories.repositories.OrderRepository;
+import org.utn.ba.order.entities.models.outbox.OutboxMessage;
+import org.utn.ba.order.entities.models.outbox.OutboxMessageFactory;
+import org.utn.ba.order.entities.repositories.outbox.OutboxMessageRepository;
 import org.utn.ba.order.mappers.OrderMapper;
 import org.utn.ba.order.mappers.UserDetailsMapper;
-import org.utn.ba.order.services.ClearCartEventPublisher;
 import org.utn.ba.order.services.IOrderService;
-import org.utn.ba.order.services.OrderConfirmationEventPublisher;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.utn.ba.order.entities.repositories.OrderRepository;
 
 @Service
 public class OrderService implements IOrderService {
@@ -28,16 +31,16 @@ public class OrderService implements IOrderService {
   private OrderRepository orderRepository;
 
   @Autowired
+  private OutboxMessageRepository outboxMessageRepository;
+
+  @Autowired
   private ProductClient productClient;
 
   @Autowired
   private ShoppingCartClient cartClient;
 
   @Autowired
-  private OrderConfirmationEventPublisher orderConfirmationEventPublisher;
-
-  @Autowired
-  private ClearCartEventPublisher clearCartEventPublisher;
+  private OutboxMessageFactory outboxMessageFactory;
 
   @Override
   public List<OrderOutputDTO> findAll() {
@@ -59,12 +62,13 @@ public class OrderService implements IOrderService {
 
   @Override
   @CircuitBreaker(name = "product", fallbackMethod = "fallbackCreateOrderWithProduct")
+  @Transactional
   public OrderOutputDTO createOrder(UserDetailsDTO userDetailsDTO) {
     ShoppingCartOutputDTO cart = cartClient.getMyCart();
     if (cart == null || cart.getItems().isEmpty()) {
-        return OrderOutputDTO.builder()
-            .description("Cannot create an order from an empty cart.")
-            .build();
+      return OrderOutputDTO.builder()
+          .description("Cannot create an order from an empty cart.")
+          .build();
     }
 
     Order newOrder = new Order();
@@ -88,14 +92,19 @@ public class OrderService implements IOrderService {
 
     newOrder.calculateFinalPrice();
     this.orderRepository.save(newOrder);
-    // mandamos al notification service para que notifique la orden
-    this.orderConfirmationEventPublisher.publishOrderConfirmation(newOrder);
 
-    // mandamos al cart service para que borre el carrito
-    this.clearCartEventPublisher.clearMyCart(userDetailsDTO.userId());
+    try {
+      OutboxMessage confirmationMsg = outboxMessageFactory.createOrderConfirmationMessage(newOrder);
+      outboxMessageRepository.save(confirmationMsg);
+
+      OutboxMessage clearCartMsg = outboxMessageFactory.createClearCartMessage(userDetailsDTO.userId());
+      outboxMessageRepository.save(clearCartMsg);
+
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Error fatal de serialización al guardar evento.", e);
+    }
 
     return OrderMapper.createFrom(newOrder);
-
   }
 
   public OrderOutputDTO fallbackCreateOrderWithProduct(Throwable t) {
@@ -105,5 +114,4 @@ public class OrderService implements IOrderService {
             "Product Service or Cart service may be down, error -> " + t.getMessage())
         .build();
   }
-
 }
