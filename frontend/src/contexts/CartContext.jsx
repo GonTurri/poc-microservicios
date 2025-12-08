@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import apiClient from '../services/api';
 import { useAuth0 } from '@auth0/auth0-react';
+import { v4 as uuidv4 } from 'uuid';
 
 const CartContext = createContext();
 
@@ -80,9 +81,14 @@ export const CartProvider = ({ children }) => {
         if (!isAuthenticated) {
             throw new Error("User not authenticated.");
         }
+        const idempotencyKey = uuidv4();
 
         try {
-            const response = await apiClient.post('/orders');
+            const response = await apiClient.post('/orders', {}, {
+                headers: {
+                    'Idempotency-Key': idempotencyKey
+                }
+            });
 
             if (response.data && response.data.description && !response.data.id) {
                 console.warn("Checkout fallback response received:", response.data.description);

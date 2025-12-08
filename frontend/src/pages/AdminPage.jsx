@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import apiClient from '../services/api';
 import { toast } from 'react-toastify';
-
+import { v4 as uuidv4 } from 'uuid';
 const AdminPage = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -87,7 +87,13 @@ const AdminPage = () => {
         const productBlob = new Blob([JSON.stringify(productData)], { type: 'application/json' });
         formData.append('product', productBlob);
 
-        const creationPromise = apiClient.post('/products', formData);
+        const idempotencyKey = uuidv4();
+
+        const creationPromise = apiClient.post('/products', formData,{
+            headers: {
+                "Idempotency-Key": idempotencyKey
+            }
+        });
 
         toast.promise(
             creationPromise,

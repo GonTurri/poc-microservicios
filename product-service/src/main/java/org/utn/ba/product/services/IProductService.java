@@ -9,5 +9,5 @@ public interface IProductService {
 
     List<ProductOutputDTO> findAll();
     ProductOutputDTO findById(Long id);
-    Long createProduct(ProductInputDTO product);
+    Long createProduct(ProductInputDTO product, String idempotencyKey, IdempotencyKeyManager idempotencyKeyManager);
 }

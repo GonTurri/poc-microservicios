@@ -9,7 +9,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.utn.ba.order.dto.OrderOutputDTO;
 import org.utn.ba.order.dto.UserDetailsDTO;
-import org.utn.ba.order.entities.models.UserDetails;
 import org.utn.ba.order.services.IOrderService;
 
 import java.util.List;
@@ -51,7 +50,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderOutputDTO> createOrder(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<OrderOutputDTO> createOrder(@AuthenticationPrincipal Jwt jwt,
+                                                      @RequestHeader(name = "Idempotency-Key", required = true) String idempotencyKey) {
 
         String userId = jwt.getSubject();
         String userEmail = jwt.getClaimAsString(emailClaimName);
@@ -65,7 +65,7 @@ public class OrderController {
             .firstName(userGivenName)
             .build();
 
-        OrderOutputDTO createdOrder = orderService.createOrder(userDetails);
+        OrderOutputDTO createdOrder = orderService.createOrder(userDetails,idempotencyKey);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }

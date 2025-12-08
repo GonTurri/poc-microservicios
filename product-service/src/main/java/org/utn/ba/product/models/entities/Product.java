@@ -25,6 +25,9 @@ public class Product {
         @Column
         private String imageUrl;
 
+        @Column(name = "idempotency_key", nullable = false, unique = true)
+        private String idempotencyKey;
+
 }
 
 

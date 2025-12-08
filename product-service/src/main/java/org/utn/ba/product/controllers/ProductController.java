@@ -11,8 +11,10 @@ import org.utn.ba.product.dto.ProductInputDTO;
 import org.utn.ba.product.dto.ProductOutputDTO;
 import org.utn.ba.product.services.IFileUploadService;
 import org.utn.ba.product.services.IProductService;
+import org.utn.ba.product.services.IdempotencyKeyManager;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/products", produces = "application/json")
@@ -24,6 +26,9 @@ public class ProductController {
 
   @Autowired
   private IFileUploadService fileUploadService;
+
+  @Autowired
+  private IdempotencyKeyManager idempotencyKeyManager;
 
   @GetMapping
   public ResponseEntity<List<ProductOutputDTO>> getAllProducts() {
@@ -46,13 +51,19 @@ public class ProductController {
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 
   public ResponseEntity<Long> createProduct(@RequestPart("product") ProductInputDTO productInputDTO,
-                                            @RequestPart("file") MultipartFile file) {
+                                            @RequestPart("file") MultipartFile file,
+  @RequestHeader(name = "Idempotency-Key", required = true) String idempotencyKey) {
+
+    Optional<Long> cachedId = idempotencyKeyManager.getResponse(idempotencyKey, Long.class);
+    if (cachedId.isPresent()) {
+      return ResponseEntity.status(HttpStatus.CREATED).body(cachedId.get());
+    }
 
     String imageUrl = fileUploadService.saveImage(file);
 
     productInputDTO.setImageUrl(imageUrl);
 
-    Long id = this.productService.createProduct(productInputDTO);
+    Long id = this.productService.createProduct(productInputDTO,idempotencyKey,idempotencyKeyManager);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
