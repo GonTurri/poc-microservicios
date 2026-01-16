@@ -46,3 +46,44 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
       CMD_ARGS: --message.format=DEFAULT --message.sendEnabled=true --server.servlet.contextPath=/
+
+
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    ports:
+      - "3100:3100"
+
+  prometheus:
+    image: prom/prometheus:v2.46.0
+    container_name: prometheus
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.local.yml
+    volumes:
+      - ./infra/prometheus/prometheus.local.yml:/etc/prometheus/prometheus.local.yml:ro
+    ports:
+      - "9090:9090"
+
+  tempo:
+    image: grafana/tempo:2.2.2
+    container_name: tempo
+    command: [ "-config.file=/etc/tempo.local.yaml" ]
+    volumes:
+      - ./infra/tempo/tempo.local.yml:/etc/tempo.local.yaml:ro
+      - ./data/tempo:/tmp/tempo
+    ports:
+      - "3110:3100"  # Tempo
+      - "9411:9411" # zipkin
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: grafana
+    volumes:
+      - ./infra/grafana:/etc/grafana/provisioning/datasources:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3003:3000"
