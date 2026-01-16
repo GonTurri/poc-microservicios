@@ -89,8 +89,8 @@ export const CartProvider = ({ children }) => {
                 throw new Error(response.data.description);
             }
             else if (response.data && response.data.id) {
-                await fetchCart();
-                console.log("hola estoy aca " + cart)
+                setCart(null);
+
                 return response.data;
             }
             else {
@@ -101,7 +101,7 @@ export const CartProvider = ({ children }) => {
             console.error('Error during checkout API call:', error);
             throw error;
         }
-    }, [isAuthenticated, fetchCart]);
+    }, [isAuthenticated]);
 
     const cartCount = cart?.items ? cart.items.reduce((count, item) => count + item.amount, 0) : 0;
 
