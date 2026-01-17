@@ -4,7 +4,7 @@ datasources:
   - name: Prometheus
     type: prometheus
     access: proxy
-    url: ${PROMETHEUS_URL:-http://prometheus:9090}
+    url: http://ejemploecommerce-prometheus-pftdqc:9090
     editable: false
     jsonData:
       httpMethod: POST
@@ -16,7 +16,7 @@ datasources:
     type: tempo
     access: proxy
     orgId: 1
-    url: ${TEMPO_URL:-http://tempo:3200}
+    url: http://ejemploecommerce-tempo-fbrb4y:3200
     basicAuth: false
     isDefault: true
     version: 1
@@ -35,7 +35,7 @@ datasources:
     uid: loki
     access: proxy
     orgId: 1
-    url: ${LOKI_URL:-http://loki:3100}
+    url: http://ejemploecommerce-loki-qtrywg:3100
     basicAuth: false
     isDefault: false
     version: 1
