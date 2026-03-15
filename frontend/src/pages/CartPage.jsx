@@ -7,7 +7,7 @@ import CartItemCard from '../components/CartItemCard';
 
 const CartPage = () => {
     const [isCheckingOut, setIsCheckingOut] = useState(false);
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const S3_BASE_URL = import.meta.env.VITE_S3_BASE_URL;
     const { cart, isLoading, updateCartItem, removeFromCart, checkout } = useCart();
     const navigate = useNavigate();
 
@@ -115,7 +115,7 @@ const CartPage = () => {
                                                 item={item}
                                                 onUpdate={handleUpdateQuantity}
                                                 onDelete={handleDeleteItem}
-                                                apiBaseUrl={API_BASE_URL}
+                                                s3BaseUrl={S3_BASE_URL}
                                             />
                                         </div>
                                     ))}

@@ -129,7 +129,7 @@ const OrderSuccessPage = () => {
                                     <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
                                         {item.imageUrl ? (
                                             <img 
-                                                src={`${import.meta.env.VITE_API_BASE_URL}${item.imageUrl}`}
+                                                src={`${import.meta.env.VITE_S3_BASE_URL}${item.imageUrl}`}
                                                 alt={item.productName}
                                                 className="w-full h-full object-cover"
                                             />

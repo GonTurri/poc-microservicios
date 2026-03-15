@@ -67,7 +67,6 @@ const AdminPage = () => {
         };
     }, [previewUrl]);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!file) {
@@ -75,38 +74,49 @@ const AdminPage = () => {
             return;
         }
 
-        if (!file.type.startsWith('image/')) {
-            toast.error('Invalid file type. Please select an image.');
-            return;
-        }
-
         setIsSubmitting(true);
-        const formData = new FormData();
-        formData.append('file', file, file.name);
-        const productData = { name, price: parseFloat(price) };
-        const productBlob = new Blob([JSON.stringify(productData)], { type: 'application/json' });
-        formData.append('product', productBlob);
-
-        const creationPromise = apiClient.post('/products', formData);
-
-        toast.promise(
-            creationPromise,
-            {
-                pending: 'Creando producto...',
-                success: '¡Producto creado exitosamente!',
-                error: 'Error al crear el producto. Intentelo más tarde'
-            }
-        );
 
         try {
-            await creationPromise;
+            const presignedRes = await apiClient.get('/files/presigned-url', {
+                params: {
+                    fileName: file.name,
+                    contentType: file.type
+                }
+            });
+
+            const { presignedUrl, objectKey } = presignedRes.data;
+
+            const uploadResponse = await fetch(presignedUrl, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'Content-Type': file.type
+                }
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Falló la subida de la imagen a S3');
+            }
+
+            const productData = {
+                name: name,
+                price: parseFloat(price),
+                tempImageKey: objectKey
+            };
+
+            await apiClient.post('/products', productData);
+
+            toast.success('¡Producto creado exitosamente!');
+
             setName('');
             setPrice('');
             setFile(null);
             setPreviewUrl(null);
             e.target.reset();
+
         } catch (error) {
             console.error("Product creation failed:", error);
+            toast.error('Error al crear el producto. Inténtelo más tarde.');
         } finally {
             setIsSubmitting(false);
         }
@@ -138,21 +148,16 @@ const AdminPage = () => {
                                         Nombre del Producto *
                                     </label>
                                     <div className="relative">
-                                        <input 
-                                            type="text" 
-                                            id="name" 
-                                            value={name} 
-                                            onChange={e => setName(e.target.value)} 
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            value={name}
+                                            onChange={e => setName(e.target.value)}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
                                             placeholder="Ej: iPhone 15 Pro"
-                                            required 
-                                            disabled={isSubmitting} 
+                                            required
+                                            disabled={isSubmitting}
                                         />
-                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                            </svg>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -164,17 +169,17 @@ const AdminPage = () => {
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <span className="text-gray-500 text-sm font-medium">$</span>
                                         </div>
-                                        <input 
-                                            type="number" 
-                                            id="price" 
-                                            value={price} 
-                                            onChange={e => setPrice(e.target.value)} 
-                                            step="0.01" 
-                                            min="0" 
-                                            className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed" 
+                                        <input
+                                            type="number"
+                                            id="price"
+                                            value={price}
+                                            onChange={e => setPrice(e.target.value)}
+                                            step="0.01"
+                                            min="0"
+                                            className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
                                             placeholder="0.00"
-                                            required 
-                                            disabled={isSubmitting} 
+                                            required
+                                            disabled={isSubmitting}
                                         />
                                     </div>
                                 </div>
@@ -193,8 +198,8 @@ const AdminPage = () => {
 
                             <div
                                 className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ${
-                                    isDragOver 
-                                        ? 'border-blue-400 bg-blue-50 scale-105' 
+                                    isDragOver
+                                        ? 'border-blue-400 bg-blue-50 scale-105'
                                         : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
                                 } ${file ? 'border-green-400 bg-green-50' : ''}`}
                                 onDragOver={handleDragOver}
@@ -231,9 +236,6 @@ const AdminPage = () => {
                                                     haz clic para seleccionar
                                                 </button>
                                             </p>
-                                            <p className="text-sm text-gray-500">
-                                                PNG, JPG, WEBP o GIF hasta 5MB
-                                            </p>
                                         </div>
                                     </div>
                                 ) : (
@@ -248,16 +250,8 @@ const AdminPage = () => {
                                                 ¡Imagen seleccionada!
                                             </p>
                                             <p className="text-sm text-gray-500 mb-4">
-                                                {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                                                {file.name}
                                             </p>
-                                            <button
-                                                type="button"
-                                                onClick={handleUploadClick}
-                                                className="text-blue-600 hover:text-blue-700 font-semibold underline"
-                                                disabled={isSubmitting}
-                                            >
-                                                Cambiar imagen
-                                            </button>
                                         </div>
                                     </div>
                                 )}
@@ -265,27 +259,11 @@ const AdminPage = () => {
 
                             {previewUrl && (
                                 <div className="flex justify-center">
-                                    <div className="relative group">
-                                        <img 
-                                            src={previewUrl} 
-                                            alt="Vista previa" 
-                                            className="max-h-64 w-auto rounded-xl shadow-lg border border-gray-200 transition-transform duration-200 group-hover:scale-105" 
-                                        />
-                                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-xl transition-all duration-200 flex items-center justify-center">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setFile(null);
-                                                    setPreviewUrl(null);
-                                                    if (fileInputRef.current) fileInputRef.current.value = '';
-                                                }}
-                                                className="opacity-0 group-hover:opacity-100 bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-red-600"
-                                                disabled={isSubmitting}
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <img
+                                        src={previewUrl}
+                                        alt="Vista previa"
+                                        className="max-h-64 w-auto rounded-xl shadow-lg border border-gray-200"
+                                    />
                                 </div>
                             )}
                         </div>
@@ -294,24 +272,9 @@ const AdminPage = () => {
                             <button
                                 type="submit"
                                 disabled={isSubmitting || !file || !name || !price}
-                                className="w-full flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 disabled:scale-100"
+                                className="w-full flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:from-blue-700 disabled:opacity-50"
                             >
-                                {isSubmitting ? (
-                                    <>
-                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Creando Producto...
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                        Crear Producto
-                                    </>
-                                )}
+                                {isSubmitting ? 'Creando...' : 'Crear Producto'}
                             </button>
                         </div>
                     </form>
