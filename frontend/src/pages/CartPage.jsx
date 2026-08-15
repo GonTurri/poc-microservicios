@@ -47,14 +47,18 @@ const CartPage = () => {
             const orderData = await toast.promise(
                 checkout(),
                 {
-                    pending: 'Procesando tu pedido...',
-                    success: '¡Pedido realizado exitosamente!',
+                    pending: 'Preparando pago seguro...',
+                    success: 'Redirigiendo a Stripe...',
                     error: 'Error al procesar el pedido. Inténtalo de nuevo.'
                 }
             );
 
-            navigate('/order-success', { state: { orderData } });
-
+            if (orderData.stripeCheckoutUrl) {
+                window.location.href = orderData.stripeCheckoutUrl;
+            } else {
+                console.error("No stripe checkout URL found in response", orderData);
+                toast.error("Error: no se pudo iniciar el pago");
+            }
         } catch (error) {
             console.error("Checkout failed:", error.message);
         } finally {

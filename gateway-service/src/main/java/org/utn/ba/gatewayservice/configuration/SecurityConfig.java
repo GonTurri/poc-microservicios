@@ -36,6 +36,7 @@ public class SecurityConfig {
             .pathMatchers(HttpMethod.PUT, "/products/**").hasAuthority("SCOPE_admin")
             .pathMatchers(HttpMethod.DELETE, "/products/**").hasAuthority("SCOPE_admin")
             .pathMatchers("/carts/**").hasAuthority("SCOPE_customer")
+            .pathMatchers(HttpMethod.POST, "/orders/webhook").permitAll()
             .pathMatchers("/orders/**").hasAuthority("SCOPE_customer")
             .anyExchange().authenticated()
         )

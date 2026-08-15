@@ -121,6 +121,13 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
+
+        <!-- Stripe SDK -->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>25.8.0</version> <!-- Using a recent stable version -->
+        </dependency>
     </dependencies>
 
     <build>
