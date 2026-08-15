@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
+import software.amazon.awssdk.services.s3.model.PutBucketPolicyRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.net.URI;
@@ -61,13 +62,36 @@ public class S3Config {
                 .build();
     }
 
-    // Importante que el bucket tenga el access download anonymous
     private void ensureBucketExists(S3Client client) {
         try {
             client.headBucket(HeadBucketRequest.builder().bucket(bucketName).build());
         } catch (NoSuchBucketException e) {
             client.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
-            log.error("Bucket '{}' created succesfully.", bucketName, e);
+            log.info("Bucket '{}' created successfully.", bucketName);
+        }
+
+        try {
+            String policy = """
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": "*",
+                        "Action": ["s3:GetObject"],
+                        "Resource": ["arn:aws:s3:::%s/*"]
+                    }
+                ]
+            }
+            """.formatted(bucketName);
+
+            client.putBucketPolicy(PutBucketPolicyRequest.builder()
+                    .bucket(bucketName)
+                    .policy(policy)
+                    .build());
+            log.info("Public read policy applied to bucket '{}'.", bucketName);
+        } catch (Exception e) {
+            log.warn("Could not set public policy on bucket '{}': {}", bucketName, e.getMessage());
         }
     }
 }
