@@ -6,10 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.utn.ba.product.dto.ProductInputDTO;
 import org.utn.ba.product.dto.ProductOutputDTO;
-import org.utn.ba.product.services.IFileUploadService;
 import org.utn.ba.product.services.IProductService;
 
 import java.util.List;
