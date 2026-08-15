@@ -22,9 +22,6 @@ public class ProductController {
   @Autowired
   private IProductService productService;
 
-  @Autowired
-  private IFileUploadService fileUploadService;
-
   @GetMapping
   public ResponseEntity<List<ProductOutputDTO>> getAllProducts() {
     return ResponseEntity
@@ -43,14 +40,8 @@ public class ProductController {
     return ResponseEntity.ok(product);
   }
 
-  @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-
-  public ResponseEntity<Long> createProduct(@RequestPart("product") ProductInputDTO productInputDTO,
-                                            @RequestPart("file") MultipartFile file) {
-
-    String imageUrl = fileUploadService.saveImage(file);
-
-    productInputDTO.setImageUrl(imageUrl);
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Long> createProduct(@RequestBody ProductInputDTO productInputDTO) {
 
     Long id = this.productService.createProduct(productInputDTO);
 
