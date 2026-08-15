@@ -11,6 +11,7 @@ import ProductListPage from './pages/ProductListPage';
 import CartPage from './pages/CartPage';
 import AdminPage from './pages/AdminPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
+import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from "./components/AdminRoute.jsx";
 
@@ -35,6 +36,7 @@ function App() {
                         <Route path="/cart" element={<ProtectedRoute component={CartPage} />} />
                         <Route path="/admin" element={<AdminRoute component={AdminPage} />} />
                         <Route path="/order-success" element={<ProtectedRoute component={OrderSuccessPage} />} />
+                        <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </main>
             </div>
