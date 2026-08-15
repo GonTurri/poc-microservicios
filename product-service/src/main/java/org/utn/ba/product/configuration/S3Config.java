@@ -22,6 +22,9 @@ public class S3Config {
     @Value("${minio.endpoint}")
     private String endpoint;
 
+    @Value("${minio.public-endpoint}")
+    private String publicEndpoint;
+
     @Value("${minio.access-key}")
     private String accessKey;
 
@@ -51,7 +54,7 @@ public class S3Config {
     public S3Presigner s3Presigner() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
         return S3Presigner.builder()
-                .endpointOverride(URI.create(endpoint))
+                .endpointOverride(URI.create(publicEndpoint))
                 .region(Region.US_EAST_1)
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .serviceConfiguration(S3Configuration.builder().pathStyleAccessEnabled(true).build())
