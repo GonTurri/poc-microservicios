@@ -143,6 +143,7 @@ public class OrderService implements IOrderService {
             .build();
     } catch (StripeException e) {
         System.err.println("Failed to create Stripe Checkout Session: " + e.getMessage());
+        this.orderRepository.delete(newOrder);
         throw new RuntimeException("Payment service unavailable: " + e.getMessage());
     }
   }

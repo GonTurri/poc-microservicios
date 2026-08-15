@@ -18,12 +18,8 @@ import AdminRoute from "./components/AdminRoute.jsx";
 function App() {
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            setupInterceptors(getAccessTokenSilently);
-        }
-
-    }, [isAuthenticated, getAccessTokenSilently]);
+    // Register getter immediately during render so child components have access before mounting
+    setupInterceptors(getAccessTokenSilently);
 
     return (
         <Router>
