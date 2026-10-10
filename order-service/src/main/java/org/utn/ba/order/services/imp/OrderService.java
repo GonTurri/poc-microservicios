@@ -1,23 +1,24 @@
 package org.utn.ba.order.services.imp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.utn.ba.events.ClearCartEvent;
+import org.utn.ba.events.OrderConfirmationEvent;
 import org.utn.ba.order.client.ProductClient;
 import org.utn.ba.order.client.ShoppingCartClient;
 import org.utn.ba.order.client.dto.ProductOutputDTO;
 import org.utn.ba.order.client.dto.ShoppingCartOutputDTO;
+import org.utn.ba.order.configuration.KafkaTopicProperties;
 import org.utn.ba.order.dto.OrderOutputDTO;
 import org.utn.ba.order.dto.UserDetailsDTO;
 import org.utn.ba.order.entities.models.Order;
 import org.utn.ba.order.entities.models.OrderItem;
-import org.utn.ba.order.entities.models.outbox.OutboxMessage;
-import org.utn.ba.order.entities.models.outbox.OutboxMessageFactory;
-import org.utn.ba.order.entities.repositories.outbox.OutboxMessageRepository;
+import org.utn.ba.order.mappers.OrderConfirmationEventMapper;
 import org.utn.ba.order.mappers.OrderMapper;
 import org.utn.ba.order.mappers.UserDetailsMapper;
+import org.utn.ba.order.services.EventPublisher;
 import org.utn.ba.order.services.IOrderService;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,16 +32,16 @@ public class OrderService implements IOrderService {
   private OrderRepository orderRepository;
 
   @Autowired
-  private OutboxMessageRepository outboxMessageRepository;
+  private EventPublisher eventPublisher;
+
+  @Autowired
+  private KafkaTopicProperties topicProperties;
 
   @Autowired
   private ProductClient productClient;
 
   @Autowired
   private ShoppingCartClient cartClient;
-
-  @Autowired
-  private OutboxMessageFactory outboxMessageFactory;
 
   @Override
   public List<OrderOutputDTO> findAll() {
@@ -93,16 +94,19 @@ public class OrderService implements IOrderService {
     newOrder.calculateFinalPrice();
     this.orderRepository.save(newOrder);
 
-    try {
-      OutboxMessage confirmationMsg = outboxMessageFactory.createOrderConfirmationMessage(newOrder);
-      outboxMessageRepository.save(confirmationMsg);
+    OrderConfirmationEvent confirmationEvent = OrderConfirmationEventMapper.fromOrder(newOrder);
+    eventPublisher.publish(
+        topicProperties.getOrderConfirmations(),
+        String.valueOf(newOrder.getId()),
+        confirmationEvent
+    );
 
-      OutboxMessage clearCartMsg = outboxMessageFactory.createClearCartMessage(userDetailsDTO.userId());
-      outboxMessageRepository.save(clearCartMsg);
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Error fatal de serialización al guardar evento.", e);
-    }
+    ClearCartEvent clearCartEvent = new ClearCartEvent(userDetailsDTO.userId());
+    eventPublisher.publish(
+        topicProperties.getClearCart(),
+        userDetailsDTO.userId(),
+        clearCartEvent
+    );
 
     return OrderMapper.createFrom(newOrder);
   }
